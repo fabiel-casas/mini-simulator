@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Mini-Simulator</string>
+
+    <string name="bottom_bar_standings">Standings</string>
+    <string name="bottom_bar_teams">Teams</string>
+    <string name="bottom_bar_rounds">Fixtures</string>
 </resources>
