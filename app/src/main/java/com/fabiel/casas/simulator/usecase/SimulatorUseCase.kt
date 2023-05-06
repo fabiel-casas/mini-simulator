@@ -1,6 +1,7 @@
 package com.fabiel.casas.simulator.usecase
 
-import com.fabiel.casas.simulator.model.table.Match
+import com.fabiel.casas.simulator.ui.screens.rounds.MatchInfo
+import com.fabiel.casas.simulator.ui.screens.rounds.RoundItemState
 
 /**
  * Mingle Sport Tech
@@ -8,6 +9,6 @@ import com.fabiel.casas.simulator.model.table.Match
  */
 interface SimulatorUseCase {
 
-    suspend fun simulateA(match: Match): Match
-    suspend fun simulateARound(matches: Pair<Match, Match>): Pair<Match, Match>
+    suspend fun simulateA(match: MatchInfo): MatchInfo
+    suspend fun simulateRound(roundItemState: RoundItemState): RoundItemState
 }

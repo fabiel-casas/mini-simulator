@@ -2,8 +2,8 @@ package com.fabiel.casas.simulator
 
 import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.fabiel.casas.simulator.model.table.Match
 import com.fabiel.casas.simulator.model.table.Team
+import com.fabiel.casas.simulator.ui.screens.rounds.MatchInfo
 import com.fabiel.casas.simulator.usecase.SimulatorUseCase
 import com.fabiel.casas.simulator.usecase.SimulatorUseCaseImpl
 import com.google.common.truth.Truth
@@ -29,6 +29,7 @@ class SimulatorUseCaseTest {
     private val scope = TestScope()
     private val teamOne = Team(
         name = "Team One",
+        logo = "Team One",
         attack = 10,
         defense = 30,
         possession = 70,
@@ -36,14 +37,16 @@ class SimulatorUseCaseTest {
     )
     private val teamTwo = Team(
         name = "Team Two",
+        logo = "Team Two",
         attack = 10,
         defense = 50,
         possession = 50,
         recovery = 50
     )
-    private val match = Match(
+    private val match = MatchInfo(
         homeTeam = teamOne,
         awayTeam = teamTwo,
+        roundId = 1,
         results = null
     )
 

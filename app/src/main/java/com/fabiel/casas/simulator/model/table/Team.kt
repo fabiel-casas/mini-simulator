@@ -1,5 +1,7 @@
 package com.fabiel.casas.simulator.model.table
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.util.UUID
 
 /**
@@ -19,9 +21,11 @@ import java.util.UUID
  * @property recovery values from 0 to 100
  * @constructor Create empty Team
  */
+@Entity
 data class Team(
-    val id: String = UUID.randomUUID().toString(),
+    @PrimaryKey val id: String = UUID.randomUUID().toString(),
     val name: String,
+    val logo: String,
     val attack: Int,
     val defense: Int,
     val possession: Int,

@@ -1,8 +1,9 @@
 package com.fabiel.casas.simulator.usecase
 
 import android.util.Log
-import com.fabiel.casas.simulator.model.table.Match
 import com.fabiel.casas.simulator.model.table.MatchResults
+import com.fabiel.casas.simulator.ui.screens.rounds.MatchInfo
+import com.fabiel.casas.simulator.ui.screens.rounds.RoundItemState
 import kotlin.random.Random
 
 /**
@@ -13,14 +14,14 @@ const val totalMinutes = 90
 
 class SimulatorUseCaseImpl : SimulatorUseCase {
 
-    override suspend fun simulateARound(matches: Pair<Match, Match>): Pair<Match, Match> {
-        return Pair(
-            simulateA(match = matches.first),
-            simulateA(match = matches.second)
+    override suspend fun simulateRound(roundItemState: RoundItemState): RoundItemState {
+        return RoundItemState(
+            roundId = roundItemState.roundId,
+            matches = roundItemState.matches.map { simulateA(it) }
         )
     }
 
-    override suspend fun simulateA(match: Match): Match {
+    override suspend fun simulateA(match: MatchInfo): MatchInfo {
         val matchActions = mutableListOf<MatchAction>()
         var previousMatchAction: MatchAction? = null
         repeat(totalMinutes) { minute ->
@@ -32,7 +33,7 @@ class SimulatorUseCaseImpl : SimulatorUseCase {
             previousMatchAction = matchAction
             matchActions.add(matchAction)
         }
-        val result = matchActions.toMatchResults()
+        val result = matchActions.toMatchResults(match)
         Log.d("*** Match Results", "Match results = $result")
         return match.copy(results = result)
     }
@@ -58,24 +59,30 @@ class SimulatorUseCaseImpl : SimulatorUseCase {
         }
     }
 
-    private fun List<MatchAction>.toMatchResults(): MatchResults {
+    private fun List<MatchAction>.toMatchResults(match: MatchInfo): MatchResults {
         val homeGoals = count { it.isGoal && it.possessionFor == Possession.HOME_POSSESSION }
         val awayGoals = count { it.isGoal && it.possessionFor == Possession.AWAY_POSSESSION }
         val homeBallPossession =
             count { it.possessionFor == Possession.HOME_POSSESSION } / totalMinutes
         val awayBallPossession =
             count { it.possessionFor == Possession.AWAY_POSSESSION } / totalMinutes
+        val winnerId = when {
+            homeGoals > awayGoals -> match.homeTeam.id
+            homeGoals < awayGoals -> match.awayTeam.id
+            else -> null
+        }
         return MatchResults(
             homeScore = homeGoals,
             awayScore = awayGoals,
             homeBallPossession = homeBallPossession,
-            awayBallPossession = awayBallPossession
+            awayBallPossession = awayBallPossession,
+            winnerTeamId = winnerId
         )
     }
 
     private fun runMatchAction(
         minute: Int,
-        match: Match,
+        match: MatchInfo,
         possessionFor: Possession,
     ): MatchAction {
         //define team possession
@@ -93,7 +100,7 @@ class SimulatorUseCaseImpl : SimulatorUseCase {
         )
     }
 
-    private fun attachTime(match: Match, possession: Possession): Boolean {
+    private fun attachTime(match: MatchInfo, possession: Possession): Boolean {
         return when (possession) {
             Possession.HOME_POSSESSION -> match.homeAttack()
             Possession.AWAY_POSSESSION -> match.awayAttack()
@@ -101,7 +108,7 @@ class SimulatorUseCaseImpl : SimulatorUseCase {
     }
 
     private fun definePossession(
-        match: Match,
+        match: MatchInfo,
         previousPossession: Possession,
     ): Possession {
         return when (previousPossession) {
@@ -135,7 +142,7 @@ class SimulatorUseCaseImpl : SimulatorUseCase {
         }
     }
 
-    private fun Match.homeAttack(): Boolean {
+    private fun MatchInfo.homeAttack(): Boolean {
         val homeScoreProbability = Random.nextInt(0, homeTeam.attack)
         val awayDefenceProbability = Random.nextInt(0, awayTeam.defense)
         Log.d(
@@ -145,7 +152,7 @@ class SimulatorUseCaseImpl : SimulatorUseCase {
         return homeScoreProbability > awayDefenceProbability
     }
 
-    private fun Match.awayAttack(): Boolean {
+    private fun MatchInfo.awayAttack(): Boolean {
         val awayScoreProbability = Random.nextInt(0, awayTeam.attack)
         val homeDefenceProbability = Random.nextInt(0, homeTeam.defense)
         Log.d(

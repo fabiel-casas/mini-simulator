@@ -4,4 +4,6 @@
     <string name="bottom_bar_standings">Standings</string>
     <string name="bottom_bar_teams">Teams</string>
     <string name="bottom_bar_rounds">Fixtures</string>
+    <string name="roundList_round_number">Round %1$s</string>
+    <string name="simulator_start_round_simulation">Start round Simulation</string>
 </resources>

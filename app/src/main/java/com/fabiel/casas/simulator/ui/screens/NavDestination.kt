@@ -1,5 +1,6 @@
 package com.fabiel.casas.simulator.ui.screens
 
+import android.net.Uri
 import com.fabiel.casas.simulator.R
 
 /**
@@ -16,6 +17,17 @@ sealed class NavDestination(val route: String) {
         fun navigationList() = listOf(Standings, RoundsList)
     }
 }
+
+fun NavDestination.withPathParameters(vararg params: String): String {
+    val uri = Uri.Builder()
+    uri.appendPath(route)
+    params.forEach {
+        uri.appendPath(it)
+    }
+    val path = uri.toString()
+    return path.substring(1, path.length)
+}
+
 
 fun NavDestination.bottomName(): Int? = when (this) {
     NavDestination.RoundsList -> R.string.bottom_bar_rounds
