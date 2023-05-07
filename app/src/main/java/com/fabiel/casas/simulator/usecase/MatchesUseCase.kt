@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 interface MatchesUseCase {
 
     fun matchesFlow(): Flow<List<RoundItemState>>
-    suspend fun createMatches()
+    suspend fun createRoundsMatches()
     suspend fun roundMatches(roundId: Int): RoundSimulationState
     suspend fun saveMatchSimulation(roundSimulationState: RoundSimulationState)
     fun getStandings(): Flow<List<StandingsItemState>>

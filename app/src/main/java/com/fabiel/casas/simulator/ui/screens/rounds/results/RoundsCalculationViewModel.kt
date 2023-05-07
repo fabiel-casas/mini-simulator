@@ -5,10 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fabiel.casas.simulator.ui.screens.rounds.MatchInfo
 import com.fabiel.casas.simulator.usecase.MatchesUseCase
-import com.fabiel.casas.simulator.usecase.Possession
 import com.fabiel.casas.simulator.usecase.SimulatorUseCase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 /**
@@ -58,32 +59,14 @@ class RoundsCalculationViewModel(
 
     private fun startSimulationAnimation(roundSimulationState: RoundSimulationState) {
         roundSimulationState.matches.forEach { matchInfo ->
-            var homeScore = 0
-            var awayScore = 0
-            viewModelScope.launch(Dispatchers.IO) {
-                matchInfo.matchTimeLine.forEach { action ->
-                    when {
-                        action.isGoal && action.possessionFor == Possession.HOME_POSSESSION -> {
-                            homeScore++
-                        }
-
-                        action.isGoal && action.possessionFor == Possession.AWAY_POSSESSION -> {
-                            awayScore++
-                        }
-                    }
-                    val matchInfoResult = matchInfo.copy(
-                        results = matchInfo.results?.copy(
-                            homeScore = homeScore.toString(),
-                            awayScore = awayScore.toString(),
-                        ),
-                        time = (action.id + 1).toString()
-                    )
-                    updateMatchInfo(matchInfoResult)
-                    delay(200L)
+            simulatorUseCase.simulateAnimation(matchInfo = matchInfo, delay = 200L)
+                .onEach {
+                    updateMatchInfo(it)
                 }
-            }.invokeOnCompletion {
-                isSimulationPlaying.value = false
-            }
+                .onCompletion {
+                    isSimulationPlaying.value = false
+                }
+                .launchIn(viewModelScope)
         }
     }
 

@@ -39,7 +39,7 @@ class RoundListViewModel(
 
     fun createMatches() {
         viewModelScope.launch(Dispatchers.IO) {
-            matchesUseCase.createMatches()
+            matchesUseCase.createRoundsMatches()
         }
     }
 }

@@ -58,7 +58,7 @@ class MatchesUseCaseImpl(
         )
     }
 
-    override suspend fun createMatches() {
+    override suspend fun createRoundsMatches() {
         val teams = teamDao.getTeams()
             .asSequence()
             .shuffled()

@@ -3,7 +3,6 @@ package com.fabiel.casas.simulator.ui.screens.rounds
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import com.fabiel.casas.simulator.model.table.Team
-import com.fabiel.casas.simulator.usecase.MatchAction
 import java.util.UUID
 
 /**
@@ -37,3 +36,14 @@ data class MatchScore(
     val awayBallPossession: String = "",
     val winnerTeamId: String? = null,
 )
+
+data class MatchAction(
+    val id: Int,
+    val isGoal: Boolean = false,
+    val possessionFor: Possession,
+)
+
+enum class Possession {
+    HOME_POSSESSION,
+    AWAY_POSSESSION,
+}
