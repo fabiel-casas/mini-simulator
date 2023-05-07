@@ -4,6 +4,7 @@ import android.app.Application
 import com.fabiel.casas.simulator.model.MiniSimulatorDatabase
 import com.fabiel.casas.simulator.ui.screens.rounds.RoundListViewModel
 import com.fabiel.casas.simulator.ui.screens.rounds.results.RoundsCalculationViewModel
+import com.fabiel.casas.simulator.ui.screens.standings.StandingsViewModels
 import com.fabiel.casas.simulator.usecase.MatchesUseCase
 import com.fabiel.casas.simulator.usecase.MatchesUseCaseImpl
 import com.fabiel.casas.simulator.usecase.SimulatorUseCase
@@ -51,5 +52,8 @@ val mainModule = module {
     }
     viewModel {
         RoundListViewModel(get())
+    }
+    viewModel {
+        StandingsViewModels(get())
     }
 }

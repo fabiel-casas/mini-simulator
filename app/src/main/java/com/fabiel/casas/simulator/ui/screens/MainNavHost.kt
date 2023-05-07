@@ -39,9 +39,7 @@ fun MainNavHost() {
             startDestination = NavDestination.Standings.route
         ) {
             composable(NavDestination.Standings.route) {
-                StandingsScreen(
-                    onBackAction = {}
-                )
+                StandingsScreen()
             }
             composable(
                 route = "${NavDestination.RoundsSimulator.route}/{roundId}",

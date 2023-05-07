@@ -6,7 +6,9 @@ import com.fabiel.casas.simulator.model.dao.TeamDao
 import com.fabiel.casas.simulator.model.table.Match
 import com.fabiel.casas.simulator.ui.screens.rounds.MatchInfo
 import com.fabiel.casas.simulator.ui.screens.rounds.RoundItemState
+import com.fabiel.casas.simulator.ui.screens.standings.StandingsItemState
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 
 /**
@@ -133,6 +135,52 @@ class MatchesUseCaseImpl(
                     roundId = matchInfo.roundId,
                     results = matchInfo.results
                 )
+            )
+        }
+    }
+
+    override fun getStandings(): Flow<List<StandingsItemState>> {
+        return combine(teamDao.getTeamsFlow(), matchDao.getMatchesFlow()) { teams, matches ->
+            val tableItems = teams.map { team ->
+                val myMatches =
+                    matches.filter { it.homeTeamId == team.id || it.awayTeamId == team.id }
+                val matchPlayed = myMatches.filter { it.results != null }
+                val matchWin = myMatches.count { it.results?.winnerTeamId == team.id }
+                val matchDraw =
+                    myMatches.count { it.results != null && it.results.winnerTeamId == null }
+                val matchLoss = myMatches.count { it.results?.winnerTeamId != team.id }
+                val goalsScored = matchPlayed.sumOf {
+                    if (team.id == it.homeTeamId) {
+                        it.results?.homeScore ?: 0
+                    } else {
+                        it.results?.awayScore ?: 0
+                    }
+                }
+                val goalsAgainst = matchPlayed.sumOf {
+                    if (team.id == it.homeTeamId) {
+                        it.results?.awayScore ?: 0
+                    } else {
+                        it.results?.homeScore ?: 0
+                    }
+                }
+                StandingsItemState(
+                    teamId = team.id,
+                    teamName = team.name,
+                    teamLogo = team.logo,
+                    played = matchPlayed.size.toString(),
+                    win = matchWin.toString(),
+                    draw = matchDraw.toString(),
+                    loss = matchLoss.toString(),
+                    points = "${(matchWin * 3) + (matchDraw)}",
+                    goalScored = goalsScored.toString(),
+                    goalAgainst = goalsAgainst.toString(),
+                    goalDifference = "${goalsScored - goalsAgainst}"
+                )
+            }
+            tableItems.sortedWith(
+                compareByDescending(StandingsItemState::points)
+                    .thenByDescending(StandingsItemState::goalDifference)
+                    .thenByDescending(StandingsItemState::played)
             )
         }
     }

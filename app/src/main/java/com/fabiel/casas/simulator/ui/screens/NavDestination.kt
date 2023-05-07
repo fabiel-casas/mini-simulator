@@ -14,7 +14,7 @@ sealed class NavDestination(val route: String) {
     object Standings : NavDestination("standings")
 
     companion object {
-        fun navigationList() = listOf(Standings, RoundsList)
+        fun navigationList() = listOf(RoundsList, Standings)
     }
 }
 

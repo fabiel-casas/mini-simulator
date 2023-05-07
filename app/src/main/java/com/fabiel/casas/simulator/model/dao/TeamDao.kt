@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.fabiel.casas.simulator.model.table.Team
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Mingle Sport Tech
@@ -19,6 +20,9 @@ interface TeamDao {
 
     @Query("SELECT * FROM Team")
     suspend fun getTeams(): List<Team>
+
+    @Query("SELECT * FROM Team")
+    fun getTeamsFlow(): Flow<List<Team>>
 
     @Query("SELECT * FROM Team WHERE id = :teamId")
     suspend fun getTeam(teamId: String): Team

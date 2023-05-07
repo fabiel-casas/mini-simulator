@@ -6,4 +6,13 @@
     <string name="bottom_bar_rounds">Fixtures</string>
     <string name="roundList_round_number">Round %1$s</string>
     <string name="simulator_start_round_simulation">Start round Simulation</string>
+    <string name="standings_table_field_club">Club</string>
+    <string name="standings_table_field_mp">MP</string>
+    <string name="standings_table_field_w">W</string>
+    <string name="standings_table_field_d">D</string>
+    <string name="standings_table_field_l">L</string>
+    <string name="standings_table_field_pts">Pts</string>
+    <string name="standings_table_field_gf">GF</string>
+    <string name="standings_table_field_ga">GA</string>
+    <string name="standings_table_field_gd">GD</string>
 </resources>
