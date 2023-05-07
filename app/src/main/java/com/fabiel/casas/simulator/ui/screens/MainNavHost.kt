@@ -36,7 +36,7 @@ fun MainNavHost() {
         NavHost(
             modifier = Modifier.padding(contentPadding),
             navController = navController,
-            startDestination = NavDestination.Standings.route
+            startDestination = NavDestination.Fixtures.route
         ) {
             composable(NavDestination.Standings.route) {
                 StandingsScreen()
@@ -52,7 +52,7 @@ fun MainNavHost() {
                     roundId = backStackEntry.arguments?.getString("roundId")
                 )
             }
-            composable(NavDestination.RoundsList.route) {
+            composable(NavDestination.Fixtures.route) {
                 RoundsListScreen(
                     onRoundClick = { roundId ->
                         navController.navigate(

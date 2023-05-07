@@ -1,6 +1,7 @@
 package com.fabiel.casas.simulator.usecase
 
 import com.fabiel.casas.simulator.ui.screens.rounds.RoundItemState
+import com.fabiel.casas.simulator.ui.screens.rounds.results.RoundSimulationState
 import com.fabiel.casas.simulator.ui.screens.standings.StandingsItemState
 import kotlinx.coroutines.flow.Flow
 
@@ -12,7 +13,7 @@ interface MatchesUseCase {
 
     fun matchesFlow(): Flow<List<RoundItemState>>
     suspend fun createMatches()
-    fun roundMatches(roundId: Int): Flow<RoundItemState>
-    suspend fun saveMatchSimulation(roundItemState: RoundItemState)
+    suspend fun roundMatches(roundId: Int): RoundSimulationState
+    suspend fun saveMatchSimulation(roundSimulationState: RoundSimulationState)
     fun getStandings(): Flow<List<StandingsItemState>>
 }

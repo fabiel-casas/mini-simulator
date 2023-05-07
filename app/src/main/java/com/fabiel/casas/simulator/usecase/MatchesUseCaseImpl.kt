@@ -6,6 +6,7 @@ import com.fabiel.casas.simulator.model.dao.TeamDao
 import com.fabiel.casas.simulator.model.table.Match
 import com.fabiel.casas.simulator.ui.screens.rounds.MatchInfo
 import com.fabiel.casas.simulator.ui.screens.rounds.RoundItemState
+import com.fabiel.casas.simulator.ui.screens.rounds.results.RoundSimulationState
 import com.fabiel.casas.simulator.ui.screens.standings.StandingsItemState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -20,6 +21,8 @@ class MatchesUseCaseImpl(
 ) : MatchesUseCase {
     private val matchDao: MatchDao = database.getMatch()
     private val teamDao: TeamDao = database.getTeam()
+
+    private val mapper = UseCaseMapper()
     override fun matchesFlow(): Flow<List<RoundItemState>> {
         return matchDao.getMatchesFlow().map { matches ->
             listOfNotNull(
@@ -51,7 +54,7 @@ class MatchesUseCaseImpl(
             homeTeam = homeTeam,
             awayTeam = awayTeam,
             roundId = roundId,
-            results = results
+            results = with(mapper) { results?.toMatchScore() }
         )
     }
 
@@ -115,25 +118,24 @@ class MatchesUseCaseImpl(
         )
     }
 
-    override fun roundMatches(roundId: Int): Flow<RoundItemState> {
-        return matchDao.getMatchesByRound(roundId)
-            .map { matches ->
-                RoundItemState(
-                    roundId = roundId,
-                    matches = matches.map { it.toMatchInfo() }
-                )
-            }
+    override suspend fun roundMatches(roundId: Int): RoundSimulationState {
+        val matches = matchDao.getMatchesByRound(roundId)
+            .map { it.toMatchInfo() }
+        return RoundSimulationState(
+            roundId = roundId,
+            matches = matches,
+        )
     }
 
-    override suspend fun saveMatchSimulation(roundItemState: RoundItemState) {
-        roundItemState.matches.forEach { matchInfo ->
+    override suspend fun saveMatchSimulation(roundSimulationState: RoundSimulationState) {
+        roundSimulationState.matches.forEach { matchInfo ->
             matchDao.insert(
                 Match(
                     id = matchInfo.id,
                     homeTeamId = matchInfo.homeTeam.id,
                     awayTeamId = matchInfo.awayTeam.id,
                     roundId = matchInfo.roundId,
-                    results = matchInfo.results
+                    results = with(mapper) { matchInfo.results?.toMatchResults() }
                 )
             )
         }
@@ -141,42 +143,7 @@ class MatchesUseCaseImpl(
 
     override fun getStandings(): Flow<List<StandingsItemState>> {
         return combine(teamDao.getTeamsFlow(), matchDao.getMatchesFlow()) { teams, matches ->
-            val tableItems = teams.map { team ->
-                val myMatches =
-                    matches.filter { it.homeTeamId == team.id || it.awayTeamId == team.id }
-                val matchPlayed = myMatches.filter { it.results != null }
-                val matchWin = myMatches.count { it.results?.winnerTeamId == team.id }
-                val matchDraw =
-                    myMatches.count { it.results != null && it.results.winnerTeamId == null }
-                val matchLoss = myMatches.count { it.results?.winnerTeamId != team.id }
-                val goalsScored = matchPlayed.sumOf {
-                    if (team.id == it.homeTeamId) {
-                        it.results?.homeScore ?: 0
-                    } else {
-                        it.results?.awayScore ?: 0
-                    }
-                }
-                val goalsAgainst = matchPlayed.sumOf {
-                    if (team.id == it.homeTeamId) {
-                        it.results?.awayScore ?: 0
-                    } else {
-                        it.results?.homeScore ?: 0
-                    }
-                }
-                StandingsItemState(
-                    teamId = team.id,
-                    teamName = team.name,
-                    teamLogo = team.logo,
-                    played = matchPlayed.size.toString(),
-                    win = matchWin.toString(),
-                    draw = matchDraw.toString(),
-                    loss = matchLoss.toString(),
-                    points = "${(matchWin * 3) + (matchDraw)}",
-                    goalScored = goalsScored.toString(),
-                    goalAgainst = goalsAgainst.toString(),
-                    goalDifference = "${goalsScored - goalsAgainst}"
-                )
-            }
+            val tableItems = with(mapper) { teams.toStandingsItemStateList(matches) }
             tableItems.sortedWith(
                 compareByDescending(StandingsItemState::points)
                     .thenByDescending(StandingsItemState::goalDifference)

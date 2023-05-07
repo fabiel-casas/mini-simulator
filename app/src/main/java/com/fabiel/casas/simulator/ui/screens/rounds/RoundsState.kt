@@ -2,8 +2,8 @@ package com.fabiel.casas.simulator.ui.screens.rounds
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import com.fabiel.casas.simulator.model.table.MatchResults
 import com.fabiel.casas.simulator.model.table.Team
+import com.fabiel.casas.simulator.usecase.MatchAction
 import java.util.UUID
 
 /**
@@ -25,5 +25,15 @@ data class MatchInfo(
     val homeTeam: Team,
     val awayTeam: Team,
     val roundId: Int,
-    val results: MatchResults?,
+    val results: MatchScore?,
+    val time: String = "0",
+    val matchTimeLine: List<MatchAction> = emptyList()
+)
+
+data class MatchScore(
+    val homeScore: String = "0",
+    val awayScore: String = "0",
+    val homeBallPossession: String = "",
+    val awayBallPossession: String = "",
+    val winnerTeamId: String? = null,
 )

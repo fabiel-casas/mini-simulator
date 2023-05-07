@@ -24,5 +24,5 @@ interface MatchDao {
     fun getMatchesFlow(): Flow<List<Match>>
 
     @Query("SELECT * FROM `Match` WHERE roundId=:roundId")
-    fun getMatchesByRound(roundId: Int): Flow<List<Match>>
+    suspend fun getMatchesByRound(roundId: Int): List<Match>
 }

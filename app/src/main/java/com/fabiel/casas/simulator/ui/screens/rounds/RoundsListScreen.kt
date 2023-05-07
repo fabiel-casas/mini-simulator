@@ -31,7 +31,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fabiel.casas.simulator.R
-import com.fabiel.casas.simulator.model.table.MatchResults
 import com.fabiel.casas.simulator.model.table.Team
 import com.fabiel.casas.simulator.ui.components.TeamItem
 import com.fabiel.casas.simulator.ui.theme.MiniSimulatorTheme
@@ -165,11 +164,11 @@ private fun RoundItemPreview() {
                         recovery = 0
                     ),
                     roundId = 0,
-                    results = MatchResults(
-                        homeScore = 1,
-                        awayScore = 0,
-                        homeBallPossession = 30,
-                        awayBallPossession = 40,
+                    results = MatchScore(
+                        homeScore = "1",
+                        awayScore = "0",
+                        homeBallPossession = "30",
+                        awayBallPossession = "40",
                         winnerTeamId = ""
                     )
                 )

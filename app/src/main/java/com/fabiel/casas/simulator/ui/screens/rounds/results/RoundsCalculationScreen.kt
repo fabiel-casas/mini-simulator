@@ -10,6 +10,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +21,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -31,7 +34,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -94,7 +99,29 @@ fun RoundsCalculationScreen(
             contentPadding = contentPadding,
         ) {
             items(state.roundState.value?.matches.orEmpty()) { matchInfo ->
-                MatchRoundItem(matchInfo)
+                val time = remember(
+                    state.isSimulationPlaying.value,
+                    state.isPlaySimulationEnable.value,
+                    matchInfo.time
+                ) {
+                    when {
+                        state.isSimulationPlaying.value -> {
+                            "${matchInfo.time}'"
+                        }
+
+                        state.isPlaySimulationEnable.value -> {
+                            "0'"
+                        }
+
+                        else -> {
+                            "End"
+                        }
+                    }
+                }
+                MatchRoundItem(
+                    matchInfo = matchInfo,
+                    time = time,
+                )
             }
         }
     }
@@ -102,36 +129,53 @@ fun RoundsCalculationScreen(
 
 @Composable
 private fun MatchRoundItem(
+    time: String,
     matchInfo: MatchInfo,
 ) {
-    Box(modifier = Modifier.fillMaxWidth()) {
-        Row(
+    Column {
+        Card(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp),
-            horizontalArrangement = Arrangement.SpaceAround
+                .align(CenterHorizontally)
+                .padding(top = 8.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+            ),
         ) {
-            TeamItem(
-                logo = matchInfo.homeTeam.logo,
-                name = matchInfo.homeTeam.name,
-                iconSize = 80.dp,
-                textAlign = TextAlign.Center,
-            )
-            TeamItem(
-                logo = matchInfo.awayTeam.logo,
-                name = matchInfo.awayTeam.name,
-                iconSize = 80.dp,
-                textAlign = TextAlign.Center,
+            Text(
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
+                text = time
             )
         }
-        Row(modifier = Modifier.align(Alignment.Center)) {
-            TextCounter(count = matchInfo.results?.homeScore ?: 0)
-            Text(
-                text = " - ",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
-            )
-            TextCounter(count = matchInfo.results?.awayScore ?: 0)
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                TeamItem(
+                    logo = matchInfo.homeTeam.logo,
+                    name = matchInfo.homeTeam.name,
+                    iconSize = 80.dp,
+                    textAlign = TextAlign.Center,
+                )
+                TeamItem(
+                    logo = matchInfo.awayTeam.logo,
+                    name = matchInfo.awayTeam.name,
+                    iconSize = 80.dp,
+                    textAlign = TextAlign.Center,
+                )
+            }
+            Row(modifier = Modifier.align(Alignment.Center)) {
+                TextCounter(count = matchInfo.results?.homeScore ?: "0")
+                Text(
+                    text = " - ",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+                TextCounter(count = matchInfo.results?.awayScore ?: "0")
+            }
         }
     }
     Divider()
@@ -139,7 +183,7 @@ private fun MatchRoundItem(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun TextCounter(count: Int) {
+fun TextCounter(count: String) {
     AnimatedContent(
         targetState = count,
         transitionSpec = {
@@ -165,7 +209,7 @@ fun TextCounter(count: Int) {
             modifier = Modifier,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
-            text = "$targetCount",
+            text = targetCount,
         )
     }
 }

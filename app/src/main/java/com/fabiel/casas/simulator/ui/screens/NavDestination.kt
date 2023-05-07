@@ -10,11 +10,11 @@ import com.fabiel.casas.simulator.R
 sealed class NavDestination(val route: String) {
 
     object RoundsSimulator : NavDestination("rounds_simulator")
-    object RoundsList : NavDestination("rounds_list")
+    object Fixtures : NavDestination("fixtures")
     object Standings : NavDestination("standings")
 
     companion object {
-        fun navigationList() = listOf(RoundsList, Standings)
+        fun navigationList() = listOf(Fixtures, Standings)
     }
 }
 
@@ -30,13 +30,13 @@ fun NavDestination.withPathParameters(vararg params: String): String {
 
 
 fun NavDestination.bottomName(): Int? = when (this) {
-    NavDestination.RoundsList -> R.string.bottom_bar_rounds
+    NavDestination.Fixtures -> R.string.bottom_bar_rounds
     NavDestination.Standings -> R.string.bottom_bar_standings
     else -> null
 }
 
 fun NavDestination.bottomIcon(): Int? = when (this) {
-    NavDestination.RoundsList -> R.drawable.ic_fixtures
+    NavDestination.Fixtures -> R.drawable.ic_fixtures
     NavDestination.Standings -> R.drawable.ic_footbal
     else -> null
 }

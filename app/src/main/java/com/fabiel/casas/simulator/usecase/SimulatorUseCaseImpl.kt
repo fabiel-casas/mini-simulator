@@ -1,9 +1,9 @@
 package com.fabiel.casas.simulator.usecase
 
 import android.util.Log
-import com.fabiel.casas.simulator.model.table.MatchResults
 import com.fabiel.casas.simulator.ui.screens.rounds.MatchInfo
-import com.fabiel.casas.simulator.ui.screens.rounds.RoundItemState
+import com.fabiel.casas.simulator.ui.screens.rounds.MatchScore
+import com.fabiel.casas.simulator.ui.screens.rounds.results.RoundSimulationState
 import kotlin.random.Random
 
 /**
@@ -14,10 +14,10 @@ const val totalMinutes = 90
 
 class SimulatorUseCaseImpl : SimulatorUseCase {
 
-    override suspend fun simulateRound(roundItemState: RoundItemState): RoundItemState {
-        return RoundItemState(
-            roundId = roundItemState.roundId,
-            matches = roundItemState.matches.map { simulateA(it) }
+    override suspend fun simulateRound(roundSimulationState: RoundSimulationState): RoundSimulationState {
+        return RoundSimulationState(
+            roundId = roundSimulationState.roundId,
+            matches = roundSimulationState.matches.map { simulateA(it) }
         )
     }
 
@@ -35,7 +35,7 @@ class SimulatorUseCaseImpl : SimulatorUseCase {
         }
         val result = matchActions.toMatchResults(match)
         Log.d("*** Match Results", "Match results = $result")
-        return match.copy(results = result)
+        return match.copy(results = result, matchTimeLine = matchActions)
     }
 
     private fun MatchAction?.nextPossessionFor(minute: Int): Possession {
@@ -59,7 +59,7 @@ class SimulatorUseCaseImpl : SimulatorUseCase {
         }
     }
 
-    private fun List<MatchAction>.toMatchResults(match: MatchInfo): MatchResults {
+    private fun List<MatchAction>.toMatchResults(match: MatchInfo): MatchScore {
         val homeGoals = count { it.isGoal && it.possessionFor == Possession.HOME_POSSESSION }
         val awayGoals = count { it.isGoal && it.possessionFor == Possession.AWAY_POSSESSION }
         val homeBallPossession =
@@ -71,11 +71,11 @@ class SimulatorUseCaseImpl : SimulatorUseCase {
             homeGoals < awayGoals -> match.awayTeam.id
             else -> null
         }
-        return MatchResults(
-            homeScore = homeGoals,
-            awayScore = awayGoals,
-            homeBallPossession = homeBallPossession,
-            awayBallPossession = awayBallPossession,
+        return MatchScore(
+            homeScore = homeGoals.toString(),
+            awayScore = awayGoals.toString(),
+            homeBallPossession = homeBallPossession.toString(),
+            awayBallPossession = awayBallPossession.toString(),
             winnerTeamId = winnerId
         )
     }
