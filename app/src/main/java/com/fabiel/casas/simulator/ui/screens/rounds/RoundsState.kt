@@ -2,7 +2,6 @@ package com.fabiel.casas.simulator.ui.screens.rounds
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import com.fabiel.casas.simulator.model.table.Team
 import java.util.UUID
 
 /**
@@ -21,12 +20,22 @@ data class RoundItemState(
 
 data class MatchInfo(
     val id: String = UUID.randomUUID().toString(),
-    val homeTeam: Team,
-    val awayTeam: Team,
+    val homeTeam: TeamInfo,
+    val awayTeam: TeamInfo,
     val roundId: Int,
     val results: MatchScore?,
     val time: String = "0",
     val matchTimeLine: List<MatchAction> = emptyList()
+)
+
+data class TeamInfo(
+    val id: String,
+    val name: String,
+    val logo: String,
+    val attack: Int,
+    val defense: Int,
+    val possession: Int,
+    val recovery: Int,
 )
 
 data class MatchScore(

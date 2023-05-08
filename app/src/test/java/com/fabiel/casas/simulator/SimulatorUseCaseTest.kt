@@ -2,8 +2,8 @@ package com.fabiel.casas.simulator
 
 import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.fabiel.casas.simulator.model.table.Team
 import com.fabiel.casas.simulator.ui.screens.rounds.MatchInfo
+import com.fabiel.casas.simulator.ui.screens.rounds.TeamInfo
 import com.fabiel.casas.simulator.usecase.SimulatorUseCase
 import com.fabiel.casas.simulator.usecase.SimulatorUseCaseImpl
 import com.google.common.truth.Truth
@@ -34,7 +34,8 @@ class SimulatorUseCaseTest : KoinTest {
 
     private val simulatorUseCase: SimulatorUseCase by inject()
     private val scope = TestScope()
-    private val teamOne = Team(
+    private val teamOne = TeamInfo(
+        id = "1",
         name = "Team One",
         logo = "Team One",
         attack = 10,
@@ -42,7 +43,8 @@ class SimulatorUseCaseTest : KoinTest {
         possession = 70,
         recovery = 30
     )
-    private val teamTwo = Team(
+    private val teamTwo = TeamInfo(
+        id = "2",
         name = "Team Two",
         logo = "Team Two",
         attack = 10,

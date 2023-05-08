@@ -31,7 +31,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fabiel.casas.simulator.R
-import com.fabiel.casas.simulator.model.table.Team
 import com.fabiel.casas.simulator.ui.components.TeamItem
 import com.fabiel.casas.simulator.ui.theme.MiniSimulatorTheme
 import org.koin.androidx.compose.getViewModel
@@ -145,7 +144,7 @@ private fun RoundItemPreview() {
             matches = listOf(
                 MatchInfo(
                     id = "",
-                    homeTeam = Team(
+                    homeTeam = TeamInfo(
                         id = "",
                         name = "Team A With a long name 12324",
                         logo = "",
@@ -154,7 +153,7 @@ private fun RoundItemPreview() {
                         possession = 0,
                         recovery = 0
                     ),
-                    awayTeam = Team(
+                    awayTeam = TeamInfo(
                         id = "",
                         name = "Team B  With a long name 12324",
                         logo = "",

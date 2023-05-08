@@ -51,8 +51,8 @@ class MatchesUseCaseImpl(
         val awayTeam = teamDao.getTeam(awayTeamId)
         return MatchInfo(
             id = id,
-            homeTeam = homeTeam,
-            awayTeam = awayTeam,
+            homeTeam = with(mapper) { homeTeam.toTeamInfo() },
+            awayTeam = with(mapper) { awayTeam.toTeamInfo() },
             roundId = roundId,
             results = with(mapper) { results?.toMatchScore() }
         )

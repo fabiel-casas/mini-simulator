@@ -4,6 +4,7 @@ import com.fabiel.casas.simulator.model.table.Match
 import com.fabiel.casas.simulator.model.table.MatchResults
 import com.fabiel.casas.simulator.model.table.Team
 import com.fabiel.casas.simulator.ui.screens.rounds.MatchScore
+import com.fabiel.casas.simulator.ui.screens.rounds.TeamInfo
 import com.fabiel.casas.simulator.ui.screens.standings.StandingsItemState
 
 /**
@@ -11,6 +12,16 @@ import com.fabiel.casas.simulator.ui.screens.standings.StandingsItemState
  * Created on 07/05/2023.
  */
 class UseCaseMapper {
+
+    fun Team.toTeamInfo() = TeamInfo(
+        id = id,
+        name = name,
+        logo = logo,
+        attack = attack,
+        defense = defense,
+        possession = possession,
+        recovery = recovery
+    )
 
     fun MatchResults.toMatchScore() = MatchScore(
         homeScore = homeScore.toString(),
