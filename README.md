@@ -10,10 +10,15 @@ Download the ![app](./app/release/app-release.aab)
 Check out a demo of the app in action in this ![Video](./images/video.webm)
 
 ## Libraries
+
 [Coroutines](https://developer.android.com/kotlin/coroutines)
+
 [Coil](https://coil-kt.github.io/coil/)
+
 [Jetpack Compose](https://developer.android.com/jetpack/compose)
+
 [Koin](https://insert-koin.io/)
+
 [Room](https://developer.android.com/training/data-storage/room)
 
 
