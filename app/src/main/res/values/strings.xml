@@ -1,10 +1,11 @@
 <resources>
-    <string name="app_name">Mini-Simulator</string>
+    <string name="app_name" translatable="false">Mini-Simulator</string>
 
     <string name="bottom_bar_standings">Standings</string>
     <string name="bottom_bar_teams">Teams</string>
     <string name="bottom_bar_rounds">Fixtures</string>
     <string name="roundList_round_number">Round %1$s</string>
+    <string name="roundList_button_start">Start</string>
     <string name="simulator_start_round_simulation">Start round Simulation</string>
     <string name="standings_table_field_club">Club</string>
     <string name="standings_table_field_mp">MP</string>

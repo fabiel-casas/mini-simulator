@@ -59,7 +59,7 @@ fun RoundsListScreen(
         floatingActionButton = {
             if (state.isCreateMatchesVisible.value) {
                 ExtendedFloatingActionButton(onClick = { viewModel.createMatches() }) {
-                    Text(text = "Start")
+                    Text(text = stringResource(R.string.roundList_button_start))
                     Icon(
                         imageVector = Icons.Default.PlayArrow,
                         contentDescription = null

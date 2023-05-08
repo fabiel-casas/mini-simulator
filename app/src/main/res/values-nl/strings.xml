@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bottom_bar_standings">Standen</string>
+    <string name="bottom_bar_teams">Teams</string>
+    <string name="bottom_bar_rounds">Wedstrijden</string>
+    <string name="roundList_round_number">Ronde %1$s</string>
+    <string name="roundList_button_start">Starten</string>
+    <string name="simulator_start_round_simulation">Start ronde simulatie</string>
+    <string name="standings_table_field_club">Club</string>
+    <string name="standings_table_field_mp">GW</string>
+    <string name="standings_table_field_w">W</string>
+    <string name="standings_table_field_d">G</string>
+    <string name="standings_table_field_l">V</string>
+    <string name="standings_table_field_pts">Pts</string>
+    <string name="standings_table_field_gf">VG</string>
+    <string name="standings_table_field_ga">TG</string>
+    <string name="standings_table_field_gd">DS</string>
+</resources>

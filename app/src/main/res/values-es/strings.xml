@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bottom_bar_standings">Posiciones</string>
+    <string name="bottom_bar_teams">Equipos</string>
+    <string name="bottom_bar_rounds">Fechas</string>
+    <string name="roundList_round_number">Fecha %1$s</string>
+    <string name="roundList_button_start">Comenzar</string>
+    <string name="simulator_start_round_simulation">Iniciar simulación de fecha</string>
+    <string name="standings_table_field_club">Club</string>
+    <string name="standings_table_field_mp">PJ</string>
+    <string name="standings_table_field_w">G</string>
+    <string name="standings_table_field_d">E</string>
+    <string name="standings_table_field_l">P</string>
+    <string name="standings_table_field_pts">Pts</string>
+    <string name="standings_table_field_gf">GF</string>
+    <string name="standings_table_field_ga">GC</string>
+    <string name="standings_table_field_gd">Dif</string>
+</resources>
