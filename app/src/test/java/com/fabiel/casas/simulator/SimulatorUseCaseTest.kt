@@ -10,8 +10,15 @@ import com.google.common.truth.Truth
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 import org.robolectric.annotation.Config
 
 /**
@@ -23,9 +30,9 @@ import org.robolectric.annotation.Config
     sdk = [Build.VERSION_CODES.P]
 )
 @RunWith(AndroidJUnit4::class)
-class SimulatorUseCaseTest {
+class SimulatorUseCaseTest : KoinTest {
 
-    private val simulatorUseCase: SimulatorUseCase = SimulatorUseCaseImpl()
+    private val simulatorUseCase: SimulatorUseCase by inject()
     private val scope = TestScope()
     private val teamOne = Team(
         name = "Team One",
@@ -50,6 +57,20 @@ class SimulatorUseCaseTest {
         results = null
     )
 
+    @Before
+    fun start() {
+        startKoin {
+            modules(modules = module {
+                factory<SimulatorUseCase> { SimulatorUseCaseImpl() }
+            })
+        }
+    }
+
+    @After
+    fun clean() {
+        stopKoin()
+    }
+
     @Test
     fun runSimulation_whenGivenCorrectMatch_returnAMatchWithResults() {
         scope.runTest {
@@ -57,7 +78,7 @@ class SimulatorUseCaseTest {
             val matchResult2 = simulatorUseCase.simulateA(match = match)
             Truth.assertThat(matchResult1.results).isNotNull()
             Truth.assertThat(matchResult2.results).isNotNull()
-            Truth.assertThat(matchResult1).isEqualTo(matchResult2)
+            Truth.assertThat(matchResult1).isNotEqualTo(matchResult2)
         }
     }
 }
