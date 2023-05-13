@@ -48,7 +48,7 @@ class UseCaseMapper {
         val matchWin = myMatches.count { it.results?.winnerTeamId == team.id }
         val matchDraw =
             myMatches.count { it.results != null && it.results.winnerTeamId == null }
-        val matchLoss = myMatches.count { it.results?.winnerTeamId != team.id }
+        val matchLoss = myMatches.count { it.results != null && it.results.winnerTeamId != team.id }
         val goalsScored = getGoalsScored(matchPlayed, team)
         val goalsAgainst = getGoalsAgainst(matchPlayed, team)
         StandingsItemState(

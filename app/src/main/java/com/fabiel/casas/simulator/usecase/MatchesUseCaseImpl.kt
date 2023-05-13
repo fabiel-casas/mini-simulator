@@ -147,7 +147,8 @@ class MatchesUseCaseImpl(
             tableItems.sortedWith(
                 compareByDescending(StandingsItemState::points)
                     .thenByDescending(StandingsItemState::goalDifference)
-                    .thenByDescending(StandingsItemState::played)
+                    .thenByDescending(StandingsItemState::goalScored)
+                    .thenByDescending(StandingsItemState::goalAgainst)
             )
         }
     }
